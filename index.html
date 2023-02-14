@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            text-align: center;
+        }
+
+        #name {
+            height: 26px;
+        }
+
+        #email {
+            height: 26px;
+        }
+
+        #password {
+            height: 26px;
+        }
+
+        #dob {
+            height: 26px;
+            width: 165px;
+        }
+
+        #nameBox {
+            padding-left: 120px;
+            height: 26px;
+        }
+
+        #emailBox {
+            padding-left: 121px;
+            height: 26px;
+        }
+
+        #passBox {
+            padding-left: 89px;
+            height: 26px;
+        }
+
+        #dobBox {
+            padding-left: 60px;
+            height: 26px;
+        }
+
+        #nameDiv {
+            display: flex;
+            margin-top: 21px;
+            padding-left: 100px;
+        }
+
+        #emailDiv {
+            display: flex;
+            margin-top: 21px;
+            padding-left: 100px;
+        }
+
+        #passwordDiv {
+            display: flex;
+            margin-top: 21px;
+            padding-left: 100px;
+        }
+
+        #dobDiv {
+            display: flex;
+            margin-top: 21px;
+            padding-left: 100px;
+        }
+
+        #termsDiv {
+            display: flex;
+            padding-left: 5px;
+        }
+
+        #termsBox {
+            display: flex;
+            padding-top: 16px;
+            padding-left: 100px;
+
+        }
+
+        .container {
+            display: inline-block;
+            width: 40%;
+            padding: 8px 8px 8px 8px;
+            border: 2px solid gray;
+        }
+
+        .box {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input {
+            display: initial;
+            font-size: 20px;
+            font-weight: 500;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        #submitBtn {
+            display: flex;
+            padding-left: 97px;
+            padding-top: 23px;
+        }
+
+        #submit:hover{
+            background-color:rgb(17, 230, 125);
+        }
+
+        #submit {
+            width: 86px;
+            height: 35px;
+            font-size: 17px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            border: 0ch;
+            border-radius: 10px;
+            background-color:rgb(31, 207, 120);
+        }
+
+        /* table CSS start from here*/
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 30px auto;
+            background-color: bisque;
+        }
+
+        table,
+        th,
+        td {
+            border: 2px solid green;
+            padding: 4px;
+        }
+
+        th {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        td {
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 300;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="heading">
+            <h1>Registration Form</h1>
+        </div>
+        <form onsubmit="validate()" name="myForm">
+
+            <div class="box">
+
+                <div id="nameDiv" class="input"> Name
+                    <div id="nameBox"><input type="text" placeholder="username" id="name" required> <br> </div>
+                </div>
+
+                <div id="emailDiv" class="input"> Email
+                    <div id="emailBox"><input type="text" placeholder="email" id="email" aria-decribedby="emailHelp"
+                            required><br></div>
+                </div>
+
+                <div id="passwordDiv" class="input "> Password
+                    <div id="passBox"> <input type="text" placeholder="password" id="password" required> <br> </div>
+                </div>
+
+                <div id="dobDiv" class="input"> Date of Birth
+                    <div id="dobBox"><input type="date" placeholder="date of birth" id="dob" min="18 years ago"
+                            max="55 years ago" required> <br> </div>
+                </div>
+
+                <div id="termsBox">
+                    <input type="checkbox" class="form-check-input" id="checkbox" required />
+                    <label id="terms" for="Check">Accept Terms & Conditions</label>
+                </div>
+
+                <div id="submitBtn">
+                    <button id="submit" type="submit" class="btn btn-success" onclick="validate(event)">
+                        Submit
+                    </button>
+                </div>
+            </div>
+    </div>
+
+    <div id="errorMessage"></div>
+
+    <div class="Entries">
+        <h2>Entries</h2>
+        </form>
+        <table id="registrationTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Dob</th>
+                    <th>Accepted terms?</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+
+
+        let userData = JSON.parse(localStorage.getItem("user"));// Get data from local storage
+
+        // Check if the data exists and is an array
+        if (userData && Array.isArray(userData)) {
+            // Get the table element
+            let table = document.getElementById("registrationTable");
+
+            // Loop through the userData array
+            for (let i = 0; i < userData.length; i++) {
+
+                let row = table.insertRow(); // Create a new row
+
+                // Insert cells for the name, dob, email, and password
+                let nameCell = row.insertCell(0);
+                let emailCell = row.insertCell(1);
+                let passwordCell = row.insertCell(2);
+                let dobCell = row.insertCell(3);
+                let t_and_cCell = row.insertCell(4);
+
+                // Set the cell values
+                nameCell.innerHTML = userData[i].name;
+                emailCell.innerHTML = userData[i].email;
+                passwordCell.innerHTML = userData[i].password;
+                dobCell.innerHTML = userData[i].dob;
+                t_and_cCell.innerHTML = userData[i].Accepted_terms;
+                console.log("error")
+            }
+        }
+
+        function validate(event) {
+            event.preventDefault();
+
+            let dob = document.getElementById("dob").value;
+            const name = document.forms["myForm"]["name"].value;
+            const email = document.forms["myForm"]["email"].value;
+            const password = document.forms["myForm"]["password"].value;
+            const errorMessage = document.getElementById("errorMessage");
+            const table = document.querySelector("#registrationTable tbody");
+            const checkbox = document.getElementById("checkbox");
+
+            // birthdate calculation
+            const calculateAge = (dob) => {
+                const today = new Date();
+                const birthDate = new Date(dob);
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (
+                    monthDiff < 0 ||
+                    (monthDiff === 0 && today.getDate() < birthDate.getDate())
+                ) {
+                    age--;
+                }
+                return age;
+            };
+
+            const age = calculateAge(dob);
+            console.log(age);
+
+            //email validation
+            const validateEmail = (email) => {
+                var re =
+                    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            };
+            if (validateEmail(email)) {
+                emailis = "valid";
+            } else {
+                emailis = "wrong";
+            }
+
+            errorMessage.innerHTML = "";
+
+            let isValid = true;
+
+            if (!name) {
+                alert("Name is required.");
+                isValid = false;
+            }
+
+            if (isNaN(age) || age < 18 || age > 55) {
+                alert("age must between 18 to 55");
+                isValid = false;
+            }
+
+            if (emailis === "wrong") {
+                alert("please enter valid email");
+                isValid = false;
+            }
+
+            if (!password) {
+                alert("Password is required. <br>");
+                isValid = false;
+            }
+
+            if (checkbox.checked) {
+                checkbox_status = "true"
+            } else {
+                checkbox_status = "false"
+            }
+
+            if (isValid) {
+                console.log("yes");
+
+                // Get the current data from local storage
+                let data = JSON.parse(localStorage.getItem("user")) || [];
+
+                // Add the new user data to the array
+                data.push({
+                    name: name,
+                    email: email,
+                    password: password,
+                    dob: dob,
+                    Accepted_terms: checkbox_status,
+                });
+
+                // Store the updated data back in local storage
+                localStorage.setItem("user", JSON.stringify(data));
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+     <td>${name}</td>
+     <td>${email}</td>
+     <td>${password}</td>
+     <td>${dob}</td>
+     <td>${checkbox_status}</td>
+     `;
+                table.appendChild(row);
+
+                document.getElementById("dob").value = "";
+                document.forms["myForm"]["name"].value = "";
+                document.forms["myForm"]["email"].value = "";
+                document.forms["myForm"]["password"].value = "";
+            }
+        }
+
+    </script>
+</body>
+
+</html>
